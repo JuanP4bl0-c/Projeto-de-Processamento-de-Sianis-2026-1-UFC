@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 
-
 #include "esp_err.h"
 #include "esp_event.h"
 #include "esp_log.h"
@@ -17,20 +16,20 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 
-#define WIFI_SSID "brisa-2504280"
-#define WIFI_PASSWORD "eubcidpn"
-#define MQTT_BROKER_URI "mqtt://192.168.0.6:1883"
-#define WIFI_AUTH_MODE WIFI_AUTH_WPA2_PSK
+// #define WIFI_SSID "brisa-2504280"
+// #define WIFI_PASSWORD "eubcidpn"
+// #define MQTT_BROKER_URI "mqtt://192.168.0.6:1883"
+// #define WIFI_AUTH_MODE WIFI_AUTH_WPA2_PSK
 
 // #define WIFI_SSID "LANCHONETE"
 // #define WIFI_PASSWORD "09260224"
 // #define MQTT_BROKER_URI "mqtt://10.10.220.31:1883"
 // #define WIFI_AUTH_MODE WIFI_AUTH_WPA2_PSK
 
-// #define WIFI_SSID "UFC_B4_SL3_2"
-// #define WIFI_PASSWORD ""
-// #define MQTT_BROKER_URI "mqtt://10.0.105.207:1883"
-// #define WIFI_AUTH_MODE WIFI_AUTH_OPEN
+#define WIFI_SSID "UFC_B4_SL3_2"
+#define WIFI_PASSWORD ""
+#define MQTT_BROKER_URI "mqtt://10.0.105.207:1883"
+#define WIFI_AUTH_MODE WIFI_AUTH_OPEN
 
 #define MQTT_CLIENT_ID "esp32-current-monitor"
 #define MQTT_TOPIC "esp32/sinal"
@@ -142,50 +141,49 @@ void mqtt_bridge_task(void *pvParameters)
     while (1) {
         if (!wifi_manager_is_connected()) {
             ESP_LOGW(TAG, "WiFi indisponível, aguardando reconexão");
-            vTaskDelay(pdMS_TO_TICKS(MQTT_RETRY_DELAY_MS));
+            vTaskDelay(pdMS_TO_TICKS(1000)); // Espera 1 segundo antes de tentar novamente
             continue;
         }
 
-// 1. IMPORTANTE: Aumente o tamanho do payload para suportar todo o texto das harmônicas
-        char payload[512]; 
+        // CORREÇÃO: A task agora fica bloqueada (portMAX_DELAY) até chegar um novo pacote do ADC
+        if (xQueueReceive(report_queue, &report, portMAX_DELAY) == pdTRUE) {
+            
+            // Aumentar o buffer para suportar o JSON com até 20 harmónicas
+            char payload[1536]; 
+            
+            // 1. Monta o cabeçalho do JSON
+            int offset = snprintf(payload, sizeof(payload),
+                "{\"mean_raw\":%.2f,\"rms_raw\":%.2f,\"mean_mv\":%.1f,\"rms_mv\":%.1f,\"mains_hz\":%.1f,\"mains_mag\":%.2f,\"first_raw\":%d,\"min_raw\":%d,\"max_raw\":%d,\"harmonicas\":[",
+                report.mean_raw, report.rms_raw, report.mean_voltage_mv, report.rms_voltage_mv,
+                report.mains_freq_hz, report.mains_magnitude, report.first_raw_value,
+                report.min_raw_value, report.max_raw_value);
 
-        if (xQueueReceive(report_queue, &report, pdMS_TO_TICKS(MQTT_RETRY_DELAY_MS)) == pdTRUE) {
-            // 2. Montamos o JSON completo, incluindo o array 'harmonicas' com as 5 frequências
-            int len = snprintf(
-                payload,
-                sizeof(payload),
-                "{\"mean_raw\":%.2f,\"rms_raw\":%.2f,\"mean_mv\":%.1f,\"rms_mv\":%.1f,\"mains_hz\":%.1f,\"mains_mag\":%.2f,\"first_raw\":%d,\"min_raw\":%d,\"max_raw\":%d,"
-                "\"harmonicas\":["
-                "{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f},"
-                "{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f},"
-                "{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f},"
-                "{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f},"
-                "{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f}"
-                "]}",
-                report.mean_raw,
-                report.rms_raw,
-                report.mean_voltage_mv,
-                report.rms_voltage_mv,
-                report.mains_freq_hz,
-                report.mains_magnitude,
-                report.first_raw_value,
-                report.min_raw_value,
-                report.max_raw_value,
-                // Passando os dados das 5 harmônicas extraídas pela FFT
-                report.harmonics[0].frequency, report.harmonics[0].magnitude, report.harmonics[0].phase,
-                report.harmonics[1].frequency, report.harmonics[1].magnitude, report.harmonics[1].phase,
-                report.harmonics[2].frequency, report.harmonics[2].magnitude, report.harmonics[2].phase,
-                report.harmonics[3].frequency, report.harmonics[3].magnitude, report.harmonics[3].phase,
-                report.harmonics[4].frequency, report.harmonics[4].magnitude, report.harmonics[4].phase
-            );
+            // 2. Adiciona as harmónicas dinamicamente
+            bool first_item = true;
+            for (int i = 0; i < REPORT_PEAKS; i++) {
+                if (report.harmonics[i].frequency > 0.0f) {
+                    offset += snprintf(payload + offset, sizeof(payload) - offset,
+                        "%s{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f}",
+                        first_item ? "" : ",", 
+                        report.harmonics[i].frequency, 
+                        report.harmonics[i].magnitude, 
+                        report.harmonics[i].phase);
+                    first_item = false;
+                }
+            }
 
-            if (len > 0 && len < (int)sizeof(payload)) {
+            // 3. Fecha o JSON
+            snprintf(payload + offset, sizeof(payload) - offset, "]}");
+
+            // 4. Publica no MQTT
+            if (offset > 0 && offset < (int)sizeof(payload)) {
+                // Mudei o QoS para 1 para garantir maior fiabilidade na entrega ao broker
                 int msg_id = esp_mqtt_client_publish(s_mqtt_client, MQTT_TOPIC, payload, 0, 1, 0);
                 if (msg_id >= 0) {
-                    ESP_LOGI(TAG, "Publicação MQTT enviada: msg_id=%d | %s", msg_id, payload);
+                    ESP_LOGI(TAG, "Publicação MQTT enviada (Tamanho: %d bytes)", offset);
+                } else {
+                    ESP_LOGE(TAG, "Falha ao publicar via MQTT.");
                 }
-            } else {
-                ESP_LOGE(TAG, "Erro: Buffer de payload muito pequeno para o JSON!");
             }
         }
     }

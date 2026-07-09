@@ -5,7 +5,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 
-#define REPORT_PEAKS 5 
+#define REPORT_PEAKS 20 
 #define RAW_PREVIEW_SIZE 128 // Quantidade de amostras brutas enviadas para o Debug no Python
 
 typedef struct {

@@ -1,7 +1,8 @@
 # Ignorar saídas de compilação do ESP-IDF
 build/
 .vscode/
-
+managed_components/
+Imagens/
 sdkconfig
 
 # Ignorar arquivos temporários do Python
