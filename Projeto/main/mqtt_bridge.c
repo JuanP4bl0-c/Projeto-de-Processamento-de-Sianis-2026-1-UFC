@@ -148,37 +148,23 @@ void mqtt_bridge_task(void *pvParameters)
         // CORREÇÃO: A task agora fica bloqueada (portMAX_DELAY) até chegar um novo pacote do ADC
         if (xQueueReceive(report_queue, &report, portMAX_DELAY) == pdTRUE) {
             
-            // Aumentar o buffer para suportar o JSON com até 20 harmónicas
-            char payload[1536]; 
-            
-            // 1. Monta o cabeçalho do JSON
-            int offset = snprintf(payload, sizeof(payload),
-                "{\"mean_raw\":%.2f,\"rms_raw\":%.2f,\"mean_mv\":%.1f,\"rms_mv\":%.1f,\"mains_hz\":%.1f,\"mains_mag\":%.2f,\"first_raw\":%d,\"min_raw\":%d,\"max_raw\":%d,\"harmonicas\":[",
-                report.mean_raw, report.rms_raw, report.mean_voltage_mv, report.rms_voltage_mv,
-                report.mains_freq_hz, report.mains_magnitude, report.first_raw_value,
-                report.min_raw_value, report.max_raw_value);
+            char payload[1024];
+            int offset = snprintf(payload, sizeof(payload), "{\"rms\": %.2f, \"freqs\": [", rms);
 
-            // 2. Adiciona as harmónicas dinamicamente
-            bool first_item = true;
-            for (int i = 0; i < REPORT_PEAKS; i++) {
-                if (report.harmonics[i].frequency > 0.0f) {
-                    offset += snprintf(payload + offset, sizeof(payload) - offset,
-                        "%s{\"f\":%.1f,\"a\":%.2f,\"p\":%.2f}",
-                        first_item ? "" : ",", 
-                        report.harmonics[i].frequency, 
-                        report.harmonics[i].magnitude, 
-                        report.harmonics[i].phase);
-                    first_item = false;
-                }
+            for (int i = 1; i < 20; i++) { // Envia as 20 primeiras harmônicas
+                float re = s_fft_buffer[i * 2];
+                float im = s_fft_buffer[i * 2 + 1];
+                float mag = sqrtf(re * re + im * im);
+                offset += snprintf(payload + offset, sizeof(payload) - offset, 
+                                "{\"f\": %d, \"m\": %.2f}%s", 
+                                i * (SAMPLE_RATE_HZ / FFT_SIZE), mag, (i < 19 ? "," : ""));
             }
-
-            // 3. Fecha o JSON
-            snprintf(payload + offset, sizeof(payload) - offset, "]}");
+            strcat(payload, "]}");
 
             // 4. Publica no MQTT
             if (offset > 0 && offset < (int)sizeof(payload)) {
                 // Mudei o QoS para 1 para garantir maior fiabilidade na entrega ao broker
-                int msg_id = esp_mqtt_client_publish(s_mqtt_client, MQTT_TOPIC, payload, 0, 1, 0);
+                int msg_id = esp_mqtt_client_publish(s_mqtt_client, "esp32/espectro", payload, 0, 0, 0);
                 if (msg_id >= 0) {
                     ESP_LOGI(TAG, "Publicação MQTT enviada (Tamanho: %d bytes)", offset);
                 } else {
