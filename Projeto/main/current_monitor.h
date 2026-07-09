@@ -5,14 +5,13 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 
-// Define a quantidade máxima de picos (harmônicas) extraídos pela FFT
 #define REPORT_PEAKS 5 
+#define RAW_PREVIEW_SIZE 128 // Quantidade de amostras brutas enviadas para o Debug no Python
 
-// Nova estrutura para carregar a Frequência, Amplitude e Fase
 typedef struct {
-    float frequency; // Frequência em Hz
-    float magnitude; // Amplitude
-    float phase;     // Fase em radianos (Crucial para remontar o sinal perfeitamente)
+    float frequency; 
+    float magnitude; 
+    float phase;     
 } harmonic_t;
 
 typedef struct {
@@ -26,8 +25,10 @@ typedef struct {
     int min_raw_value;
     int max_raw_value;
     
-    // Array que armazenará os dados da FFT para enviar via MQTT
     harmonic_t harmonics[REPORT_PEAKS]; 
+    
+    // NOVO: Array para armazenar as amostras brutas do ADC enviadas ao Python
+    uint16_t raw_samples[RAW_PREVIEW_SIZE];
 } current_monitor_report_t;
 
 esp_err_t current_monitor_start(void);

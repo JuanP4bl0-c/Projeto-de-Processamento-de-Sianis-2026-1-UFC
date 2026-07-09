@@ -337,7 +337,7 @@ static void current_monitor_analyze_window(const float *samples, size_t sample_c
     }
 
     if (report != NULL) {
-        
+
             report->mean_raw = mean;
             report->rms_raw = rms;
             report->mean_voltage_mv = mean_voltage_mv;
