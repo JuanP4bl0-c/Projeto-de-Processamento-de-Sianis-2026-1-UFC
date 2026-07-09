@@ -1,32 +1,36 @@
 #include "mqtt_bridge.h"
+#include "current_monitor.h"
 
 #include <stdio.h>
 
-#include "current_monitor.h"
+
 #include "esp_err.h"
 #include "esp_event.h"
 #include "esp_log.h"
+
 #include "mqtt_client.h"
+
 #include "nvs_flash.h"
 #include "wifi_manager.h"
 #include "freertos/FreeRTOS.h"
+
 #include "freertos/queue.h"
 #include "freertos/task.h"
 
-// #define WIFI_SSID "brisa-2504280"
-// #define WIFI_PASSWORD "eubcidpn"
-// #define MQTT_BROKER_URI "mqtt://192.168.0.6:1883"
-// #define WIFI_AUTH_MODE WIFI_AUTH_WPA2_PSK
+#define WIFI_SSID "brisa-2504280"
+#define WIFI_PASSWORD "eubcidpn"
+#define MQTT_BROKER_URI "mqtt://192.168.0.6:1883"
+#define WIFI_AUTH_MODE WIFI_AUTH_WPA2_PSK
 
 // #define WIFI_SSID "LANCHONETE"
 // #define WIFI_PASSWORD "09260224"
 // #define MQTT_BROKER_URI "mqtt://10.10.220.31:1883"
 // #define WIFI_AUTH_MODE WIFI_AUTH_WPA2_PSK
 
-#define WIFI_SSID "UFC_B4_SL3_2"
-#define WIFI_PASSWORD ""
-#define MQTT_BROKER_URI "mqtt://10.0.105.207:1883"
-#define WIFI_AUTH_MODE WIFI_AUTH_OPEN
+// #define WIFI_SSID "UFC_B4_SL3_2"
+// #define WIFI_PASSWORD ""
+// #define MQTT_BROKER_URI "mqtt://10.0.105.207:1883"
+// #define WIFI_AUTH_MODE WIFI_AUTH_OPEN
 
 #define MQTT_CLIENT_ID "esp32-current-monitor"
 #define MQTT_TOPIC "esp32/sinal"

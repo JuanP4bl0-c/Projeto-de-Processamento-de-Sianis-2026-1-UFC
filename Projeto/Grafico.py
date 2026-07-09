@@ -6,7 +6,8 @@ import numpy as np
 from collections import deque
 
 # --- Configurações ---
-BROKER = "10.0.105.207"
+# BROKER = "10.0.105.207"
+BROKER = "192.168.0.6"
 TOPICO = "esp32/sinal"
 FATOR_CALIBRACAO = 0.0001236
 

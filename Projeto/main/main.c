@@ -29,14 +29,7 @@ void app_main(void)
         return;
     }
 
-    BaseType_t monitor_ok = xTaskCreatePinnedToCore(
-        current_monitor_task,
-        "Monitor_Corrente",
-        6144,
-        report_queue,
-        6,
-        NULL,
-        0);
+    BaseType_t monitor_ok = xTaskCreatePinnedToCore(current_monitor_task,"Monitor_Corrente",6144,report_queue,6,NULL,0);
 
     if (monitor_ok != pdPASS) {
         ESP_LOGE(TAG, "Falha ao criar task de dados da corrente");
@@ -44,14 +37,7 @@ void app_main(void)
         return;
     }
 
-    BaseType_t mqtt_ok = xTaskCreatePinnedToCore(
-        mqtt_bridge_task,
-        "MQTT_Bridge",
-        6144,
-        report_queue,
-        5,
-        NULL,
-        1);
+    BaseType_t mqtt_ok = xTaskCreatePinnedToCore(mqtt_bridge_task,"MQTT_Bridge",6144,report_queue,5,NULL,1);
 
     if (mqtt_ok != pdPASS) {
         ESP_LOGE(TAG, "Falha ao criar task de rede/MQTT");

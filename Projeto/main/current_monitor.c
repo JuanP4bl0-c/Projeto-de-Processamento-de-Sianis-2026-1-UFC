@@ -9,6 +9,7 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "esp_timer.h"
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
@@ -21,7 +22,6 @@
 #define FFT_SIZE 1024
 #define SAMPLE_RATE_HZ 4000
 #define SAMPLE_PERIOD_US (1000000LL / SAMPLE_RATE_HZ)
-// #define REPORT_PEAKS 5
 #define SAMPLE_PREVIEW_COUNT 8
 #define ADC_MAX_COUNTS 4095.0f
 #define ADC_VREF_MV 3300.0f
@@ -34,7 +34,7 @@ typedef struct {
 typedef struct {
     int bin;
     float magnitude;
-    float phase; // Fase em radianos (Crucial para remontar o sinal perfeitamente)
+    float phase; // Fase em radianos
 } spectral_peak_t;
 
 static const char *TAG = "CURRENT_MONITOR";
@@ -55,8 +55,6 @@ static float magnitude_of(const complex_float_t *value)
     return sqrtf((value->re * value->re) + (value->im * value->im));
 }
 
-
-// NOVA FUNÇÃO
 static float phase_of(const complex_float_t *value)
 {
     return atan2f(value->im, value->re);
@@ -143,7 +141,7 @@ static void insert_peak(spectral_peak_t peaks[REPORT_PEAKS], int bin, float magn
 
     peaks[REPORT_PEAKS - 1].bin = bin;
     peaks[REPORT_PEAKS - 1].magnitude = magnitude;
-    peaks[REPORT_PEAKS - 1].phase = phase; // NOVO: Salva a fase
+    peaks[REPORT_PEAKS - 1].phase = phase;
 
     for (int index = REPORT_PEAKS - 1; index > 0; --index) {
         if (peaks[index].magnitude <= peaks[index - 1].magnitude) {
@@ -282,7 +280,7 @@ static void current_monitor_analyze_window(const float *samples, size_t sample_c
         max_bin = (int)(sample_count / 2);
     }
 
-// NOVO: Busca apenas por Picos Locais (Local Maxima) para evitar vazamento espectral
+    // NOVO: Busca apenas por Picos Locais Local Maxima para evitar vazamento espectral
     for (int bin = min_bin; bin < max_bin; ++bin) {
         
         float mag_center = magnitude_of(&s_fft_buffer[bin]);
@@ -339,6 +337,7 @@ static void current_monitor_analyze_window(const float *samples, size_t sample_c
     }
 
     if (report != NULL) {
+        
             report->mean_raw = mean;
             report->rms_raw = rms;
             report->mean_voltage_mv = mean_voltage_mv;
@@ -349,7 +348,6 @@ static void current_monitor_analyze_window(const float *samples, size_t sample_c
             report->min_raw_value = s_last_min_raw_value;
             report->max_raw_value = s_last_max_raw_value;
 
-            // Add this block to copy the harmonic data!
             for (int i = 0; i < REPORT_PEAKS; i++) {
                 if (peaks[i].bin > 0) {
                     report->harmonics[i].frequency = ((float)peaks[i].bin * (float)SAMPLE_RATE_HZ) / (float)sample_count;

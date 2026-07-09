@@ -11,3 +11,4 @@ __pycache__/
 # Ignorar arquivos do sistema ou do LTspice temporários
 *.log
 *.raw
+*.pdf
