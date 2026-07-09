@@ -1,0 +1,11 @@
+# Ignorar saídas de compilação do ESP-IDF
+build/
+sdkconfig
+
+# Ignorar arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Ignorar arquivos do sistema ou do LTspice temporários
+*.log
+*.raw

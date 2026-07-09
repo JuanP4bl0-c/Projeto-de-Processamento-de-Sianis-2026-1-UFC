@@ -1,0 +1,6 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "idf.py": true,
+        ".": true
+    }
+}
