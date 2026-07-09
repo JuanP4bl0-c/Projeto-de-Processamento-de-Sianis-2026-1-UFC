@@ -1,0 +1,1472 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "95875f9075017aed",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Desativar Solenoide Manual",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"state\":false}",
+        "payloadType": "json",
+        "x": 1020,
+        "y": 680,
+        "wires": [
+            [
+                "a60ed31ab8414d4b"
+            ]
+        ]
+    },
+    {
+        "id": "a60ed31ab8414d4b",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "solenoide_Command",
+        "topic": "esp32/solenoid",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "243ccc213685bea4",
+        "x": 1600,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "93c784753674601f",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "Ativar Solenoide Manual",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"state\":true}",
+        "payloadType": "json",
+        "x": 1010,
+        "y": 640,
+        "wires": [
+            [
+                "a60ed31ab8414d4b"
+            ]
+        ]
+    },
+    {
+        "id": "1380f61cd883fdd7",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ddef8f3fd1548368",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dht11 Data",
+        "topic": "esp32/dht11",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 280,
+        "wires": [
+            [
+                "1380f61cd883fdd7"
+            ]
+        ]
+    },
+    {
+        "id": "babdd75232230b2b",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ea387b24eab2ed0d",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "b1c27ecf5d8e1197",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "4918e26ac6b1d846",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "783dc325303436b5",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Config",
+        "topic": "esp32/config",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 520,
+        "wires": [
+            [
+                "4918e26ac6b1d846"
+            ]
+        ]
+    },
+    {
+        "id": "fcea1c3cba3fd0eb",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "UV Data",
+        "topic": "esp32/uv",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 460,
+        "wires": [
+            [
+                "b1c27ecf5d8e1197"
+            ]
+        ]
+    },
+    {
+        "id": "1a10ac8ba0702575",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Alertas",
+        "topic": "esp32/alerts",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 400,
+        "wires": [
+            [
+                "ea387b24eab2ed0d"
+            ]
+        ]
+    },
+    {
+        "id": "106d8a286ced3119",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Sendor Solo Data",
+        "topic": "esp32/soil_moisture",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 340,
+        "wires": [
+            [
+                "babdd75232230b2b"
+            ]
+        ]
+    },
+    {
+        "id": "1700c28e3b8af5b7",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Solenoide cmd",
+        "topic": "esp32/solenoid",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 580,
+        "wires": [
+            [
+                "4918e26ac6b1d846"
+            ]
+        ]
+    },
+    {
+        "id": "e0198e9d5583347e",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Ativar Solenoide Manualmente",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"state\":true}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 1010,
+        "y": 760,
+        "wires": [
+            [
+                "a60ed31ab8414d4b"
+            ]
+        ]
+    },
+    {
+        "id": "e9d5a3eff73ee0c1",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Desativar Solenoide Manualmente",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "green",
+        "className": "",
+        "icon": "",
+        "payload": "{\"state\":false}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 1020,
+        "y": 720,
+        "wires": [
+            [
+                "a60ed31ab8414d4b"
+            ]
+        ]
+    },
+    {
+        "id": "cf5a8ecb5dadaf09",
+        "type": "ui_toast",
+        "z": "f6f2187d.f17ca8",
+        "position": "top left",
+        "displayTime": "3",
+        "highlight": "green",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "alerta",
+        "x": 610,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "7519993287939761",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Alertas",
+        "topic": "esp32/alerts",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 700,
+        "wires": [
+            [
+                "cf5a8ecb5dadaf09"
+            ]
+        ]
+    },
+    {
+        "id": "cc84f5a0b2f7378b",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Dht11 Data",
+        "topic": "esp32/dht11",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 760,
+        "wires": [
+            [
+                "75c11ef19140eeb7",
+                "6e09ed6b023c516a"
+            ]
+        ]
+    },
+    {
+        "id": "986f10f82bed8e4b",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "e1aa1e95f9ceb681",
+        "order": 3,
+        "width": "2",
+        "height": "2",
+        "name": "Dados de temperatura",
+        "label": "Temperatura",
+        "format": "{{msg.payload + \"ºC\"}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 660,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "75c11ef19140eeb7",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filtro temperatura",
+        "func": "// Extrai a temperatura do JSON recebido via MQTT\nmsg.payload = msg.payload.temperature;\nmsg.topic = \"Temperatura\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 760,
+        "wires": [
+            [
+                "986f10f82bed8e4b",
+                "e34745d72ac3a635",
+                "7f4b9adba3cdc22f"
+            ]
+        ]
+    },
+    {
+        "id": "da1342c2504adb5b",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "e1aa1e95f9ceb681",
+        "order": 3,
+        "width": "2",
+        "height": "2",
+        "name": "Dados de humidade ar",
+        "label": "Humidade Da Estufa",
+        "format": "{{msg.payload + \"%\"}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 660,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "6e09ed6b023c516a",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filtro Humidade ar",
+        "func": "// Extrai a temperatura do JSON recebido via MQTT\nmsg.payload = msg.payload.humidity;\nmsg.topic = \"Humidade Ar\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 820,
+        "wires": [
+            [
+                "da1342c2504adb5b",
+                "7f4b9adba3cdc22f"
+            ]
+        ]
+    },
+    {
+        "id": "66268fc98b0a2e52",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Sendor Solo Data",
+        "topic": "esp32/soil_moisture",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 880,
+        "wires": [
+            [
+                "761a748f80562f9d"
+            ]
+        ]
+    },
+    {
+        "id": "761a748f80562f9d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filtro Humidade solo",
+        "func": "// Extrai a temperatura do JSON recebido via MQTT\nmsg.payload = msg.payload.moisture_percent;\nmsg.topic = \"Humidade Solo\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 960,
+        "wires": [
+            [
+                "42f55419f98f69b0",
+                "04b956f3354d6b66",
+                "7f4b9adba3cdc22f"
+            ]
+        ]
+    },
+    {
+        "id": "42f55419f98f69b0",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "e1aa1e95f9ceb681",
+        "order": 3,
+        "width": "2",
+        "height": "2",
+        "name": "Dados de humidade solo",
+        "label": "Humidade Do Solo",
+        "format": "{{msg.payload + \"%\"}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 670,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "4f040f9bf63ff3bd",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "UV Data",
+        "topic": "esp32/uv",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 80,
+        "y": 820,
+        "wires": [
+            [
+                "278f2618a310690b"
+            ]
+        ]
+    },
+    {
+        "id": "278f2618a310690b",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "filtro UV",
+        "func": "let v = msg.payload.uv_voltage; // tensão em volts\nlet iuv = v * 10; // conversão linear\nif (iuv < 0) iuv = 0;\nif (iuv > 11) iuv = 11;\nmsg.payload = iuv;\nmsg.topic = \"IUV\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 880,
+        "wires": [
+            [
+                "a509552e46bea53e",
+                "7f4b9adba3cdc22f",
+                "c05a788a5545118b"
+            ]
+        ]
+    },
+    {
+        "id": "a509552e46bea53e",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "e1aa1e95f9ceb681",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Dados_UV",
+        "label": "Indice de UV",
+        "format": "{{msg.payload + \"(IUV)\"}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 630,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "04b956f3354d6b66",
+        "type": "ui_gauge",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "267d02213ba78c23",
+        "order": 0,
+        "width": "3",
+        "height": "3",
+        "gtype": "donut",
+        "title": "Humidade Solo",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#e1ff00",
+            "#50e600",
+            "#ff1414"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 640,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "7f4b9adba3cdc22f",
+        "type": "ui_chart",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "267d02213ba78c23",
+        "order": 3,
+        "width": "0",
+        "height": "0",
+        "label": "Histórico",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "dd HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "80",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#47e694",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 620,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e34745d72ac3a635",
+        "type": "ui_gauge",
+        "z": "f6f2187d.f17ca8",
+        "name": "grafico temperatura",
+        "group": "267d02213ba78c23",
+        "order": 0,
+        "width": "3",
+        "height": "3",
+        "gtype": "donut",
+        "title": "Temperatura   ",
+        "label": "ºC",
+        "format": "{{value}}",
+        "min": "-5",
+        "max": "50",
+        "colors": [
+            "#62adf4",
+            "#2bff00",
+            "#ff0000"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 650,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "c05a788a5545118b",
+        "type": "ui_gauge",
+        "z": "f6f2187d.f17ca8",
+        "name": "grafico uv",
+        "group": "267d02213ba78c23",
+        "order": 0,
+        "width": "3",
+        "height": "3",
+        "gtype": "donut",
+        "title": "Indicíe de UV   ",
+        "label": "IUV",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "11",
+        "colors": [
+            "#4c31d3",
+            "#ffdd00",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 620,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "10cb4da65e155983",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Imprimir Status",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "purple",
+        "className": "",
+        "icon": "",
+        "payload": "{\"command\":\"get_status\"}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 960,
+        "y": 880,
+        "wires": [
+            [
+                "c9eb0dc11dc45f2d"
+            ]
+        ]
+    },
+    {
+        "id": "84c6f936e656a38e",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Atualizar Dados",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "orange",
+        "className": "",
+        "icon": "",
+        "payload": "{\"command\":\"publish_all\"}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 960,
+        "y": 840,
+        "wires": [
+            [
+                "c9eb0dc11dc45f2d"
+            ]
+        ]
+    },
+    {
+        "id": "be4a321893058676",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Reiniciar a Estufa",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "gray",
+        "className": "",
+        "icon": "",
+        "payload": "{\"command\":\"restart\"}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 970,
+        "y": 920,
+        "wires": [
+            [
+                "c9eb0dc11dc45f2d"
+            ]
+        ]
+    },
+    {
+        "id": "c9eb0dc11dc45f2d",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "esp32_Command",
+        "topic": "esp32/commands",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "243ccc213685bea4",
+        "x": 1590,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "0b82b23d4aeaf73c",
+        "type": "ui_text_input",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "label": "Intervalo de Leitura  ( Em minutos)",
+        "tooltip": "",
+        "group": "c01e014d8bf80b33",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "number",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 1020,
+        "y": 1080,
+        "wires": [
+            [
+                "33db19e1b7eb10f8"
+            ]
+        ]
+    },
+    {
+        "id": "33db19e1b7eb10f8",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "conversao para mqtt",
+        "func": "// Converte para número\nlet minutes = Number(msg.payload);\n\n// Guarda mesmo se inválido (valida depois)\nflow.set(\"intervalo_min\", minutes);\n\nreturn null; // não propaga\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1360,
+        "y": 1080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a650a44ba2c228d9",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "c01e014d8bf80b33",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Enviar",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{}",
+        "payloadType": "json",
+        "topic": "send_interval",
+        "topicType": "msg",
+        "x": 930,
+        "y": 800,
+        "wires": [
+            [
+                "1bf34127e1747b80"
+            ]
+        ]
+    },
+    {
+        "id": "1bf34127e1747b80",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "envia data",
+        "func": "// Recupera valor digitado\nlet minutes = flow.get(\"intervalo_min\");\n\n// Validação\nif (isNaN(minutes) || minutes < 1) {\n    node.warn(\"Intervalo inválido. Deve ser >= 1 minuto\");\n    return null;\n}\n\n// Força inteiro\nminutes = Math.floor(minutes);\n\n// Monta o JSON desejado\nmsg.payload = JSON.stringify({\n    command: \"set_read_period\",\n    minutes: minutes\n});\n\n// Topic MQTT\nmsg.topic = \"esp32/command\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1330,
+        "y": 800,
+        "wires": [
+            [
+                "c9eb0dc11dc45f2d"
+            ]
+        ]
+    },
+    {
+        "id": "9edb559257fb3a11",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Status",
+        "topic": "esp32/status",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 640,
+        "wires": [
+            [
+                "0f623b1ff46722a7",
+                "44b21b46ce6434a7"
+            ]
+        ]
+    },
+    {
+        "id": "d1d64906740ad18e",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "ee622257d57b4117",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": true,
+        "font": "Arial Black,Arial Black,Gadget,sans-serif",
+        "fontSize": "15",
+        "color": "#000000",
+        "x": 610,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "0f623b1ff46722a7",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 1",
+        "func": "let p = msg.payload;\n\nmsg.payload =\n    \"Status: \" + (p.status || \"desconhecido\");\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 660,
+        "wires": [
+            [
+                "d1d64906740ad18e"
+            ]
+        ]
+    },
+    {
+        "id": "44b21b46ce6434a7",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 2",
+        "func": "let p = msg.payload;\n\n// Monta a query com placeholders ($1, $2...)\nmsg.query = {\n    text: `\n        INSERT INTO sensor_readings\n        (device_id, temperature, humidity, uv_index,\n         solenoid_state, read_period_minutes, status)\n        VALUES ($1,$2,$3,$4,$5,$6,$7)\n    `,\n    values: [\n        p.device_id,\n        p.temperature,\n        p.humidity,\n        p.uv_index || null,\n        p.solenoid_state,\n        p.read_period_minutes,\n        p.status\n    ]\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2027a2fcf4c4704",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "teste",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"device_id\":\"ESP32_TEST\",\"temperature\":25.5,\"humidity\":55,\"uv_index\":3.2,\"solenoid_state\":false,\"read_period_minutes\":5,\"status\":\"online\"}",
+        "payloadType": "json",
+        "x": 370,
+        "y": 540,
+        "wires": [
+            [
+                "44b21b46ce6434a7"
+            ]
+        ]
+    },
+    {
+        "id": "cd0745e8419e8244",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Liga o Modo de economia de energia",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "green",
+        "className": "",
+        "icon": "",
+        "payload": "{\"command\": \"power_save_on\"}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 1030,
+        "y": 960,
+        "wires": [
+            [
+                "c9eb0dc11dc45f2d"
+            ]
+        ]
+    },
+    {
+        "id": "7e6a895c15c7bfc6",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Desliga o modo de economia de energia",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"command\": \"power_save_off\"}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 1040,
+        "y": 1000,
+        "wires": [
+            [
+                "c9eb0dc11dc45f2d"
+            ]
+        ]
+    },
+    {
+        "id": "2b3ac4909d97215d",
+        "type": "ui_button",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "group": "05743bbf91fe0065",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "modo  equilibrado de economia de energia",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"command\": \"set_power_mode\", \"mode\": \"auto\"}",
+        "payloadType": "json",
+        "topic": "payload",
+        "topicType": "msg",
+        "x": 1040,
+        "y": 1040,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "463f71e85f53f7e1",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "ee622257d57b4117",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": true,
+        "font": "Arial Black,Arial Black,Gadget,sans-serif",
+        "fontSize": "15",
+        "color": "#000000",
+        "x": 610,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "eb5382cce654bf81",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 3",
+        "func": "let p = msg.payload;\n\nmsg.payload =\n    \"Período de leitura: \" + p.read_period_minutes;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1060,
+        "wires": [
+            [
+                "463f71e85f53f7e1"
+            ]
+        ]
+    },
+    {
+        "id": "423aef63a76090a3",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "Status",
+        "topic": "esp32/status",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "243ccc213685bea4",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 940,
+        "wires": [
+            [
+                "ba4350e2aecdd46b",
+                "eb5382cce654bf81",
+                "ea05bd25137b9b5d",
+                "b3ea3947c588fd6d",
+                "498894139207caf0"
+            ]
+        ]
+    },
+    {
+        "id": "69f73b2ff8ac8e6d",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "ee622257d57b4117",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": true,
+        "font": "Arial Black,Arial Black,Gadget,sans-serif",
+        "fontSize": "15",
+        "color": "#000000",
+        "x": 610,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "ba4350e2aecdd46b",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 4",
+        "func": "let p = msg.payload;\n\nmsg.payload =\n    \"Solenoide ligado: \" + (p.solenoid_state ? \"SIM\" : \"NÃO\");\n    \n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1100,
+        "wires": [
+            [
+                "69f73b2ff8ac8e6d"
+            ]
+        ]
+    },
+    {
+        "id": "b5695fccc7fe4949",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "ee622257d57b4117",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": true,
+        "font": "Arial Black,Arial Black,Gadget,sans-serif",
+        "fontSize": "15",
+        "color": "#000000",
+        "x": 610,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "ea05bd25137b9b5d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 5",
+        "func": "let p = msg.payload;\n\nmsg.payload =\n\"Uptime: \" + Math.floor(p.uptime_seconds / 60);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1140,
+        "wires": [
+            [
+                "b5695fccc7fe4949"
+            ]
+        ]
+    },
+    {
+        "id": "23a89aa19b813c06",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "ee622257d57b4117",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": true,
+        "font": "Arial Black,Arial Black,Gadget,sans-serif",
+        "fontSize": "15",
+        "color": "#000000",
+        "x": 610,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "b3ea3947c588fd6d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 6",
+        "func": "let p = msg.payload;\n\nmsg.payload =\n   \"Última atualização: \" + p.datetime;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1180,
+        "wires": [
+            [
+                "23a89aa19b813c06"
+            ]
+        ]
+    },
+    {
+        "id": "498894139207caf0",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 7",
+        "func": "let p = msg.payload;\n\nmsg.payload =\n    \"Solenoide habilitado: \" + (p.solenoid_enabled ? \"SIM\" : \"NÃO\");\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1220,
+        "wires": [
+            [
+                "1d9118a51924eca3"
+            ]
+        ]
+    },
+    {
+        "id": "1d9118a51924eca3",
+        "type": "ui_text",
+        "z": "f6f2187d.f17ca8",
+        "group": "ee622257d57b4117",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": true,
+        "font": "Arial Black,Arial Black,Gadget,sans-serif",
+        "fontSize": "15",
+        "color": "#000000",
+        "x": 610,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "243ccc213685bea4",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "a1gqpq2oiyi1r1-ats.iot.us-east-1.amazonaws.com",
+        "port": "8883",
+        "tls": "77ae7433d5af5788",
+        "clientid": "NodeRed_UFC",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "05743bbf91fe0065",
+        "type": "ui_group",
+        "name": "Menu de Comandos",
+        "tab": "6227bfd86cd815c7",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "e1aa1e95f9ceb681",
+        "type": "ui_group",
+        "name": "Informações",
+        "tab": "6227bfd86cd815c7",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "267d02213ba78c23",
+        "type": "ui_group",
+        "name": "Visuais",
+        "tab": "6227bfd86cd815c7",
+        "order": 3,
+        "disp": true,
+        "width": "10",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "c01e014d8bf80b33",
+        "type": "ui_group",
+        "name": "Intervalo de Leitura",
+        "tab": "6227bfd86cd815c7",
+        "order": 4,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ee622257d57b4117",
+        "type": "ui_group",
+        "name": "Status",
+        "tab": "6227bfd86cd815c7",
+        "order": 5,
+        "disp": true,
+        "width": "8",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "77ae7433d5af5788",
+        "type": "tls-config",
+        "name": "Certificado",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "376f19f7d489fd831039a918bc7a9ec29a363566a92e0c10b4fc5b0f69aa345f-certificate.pem.crt",
+        "keyname": "376f19f7d489fd831039a918bc7a9ec29a363566a92e0c10b4fc5b0f69aa345f-private.pem.key",
+        "caname": "AmazonRootCA1.pem",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "6227bfd86cd815c7",
+        "type": "ui_tab",
+        "name": "Green Live House",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "3e2bf1fc11dd863f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
