@@ -1,85 +1,50 @@
 #include <stdio.h>
-#include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
+
+#include "esp_err.h"
 #include "esp_log.h"
-#include "esp_dsp.h"
-#include "esp_adc/adc_oneshot.h"
-#include "esp_rom_sys.h" // Para esp_rom_delay_us
-#include <math.h>
 
-#define N_SAMPLES 1024
-#define ADC_CHANNEL ADC_CHANNEL_0
+#include "current_monitor.h"
+#include "mqtt_bridge.h"
 
-static const char *TAG = "FFT_ADC";
+static const char *TAG = "main";
 
-// Buffers alinhados para esp-dsp (necessário para performance)
-static __attribute__((aligned(16))) float wind[N_SAMPLES];
-static __attribute__((aligned(16))) float adc_data[N_SAMPLES * 2]; // Intercalado Real/Imag
-
-void app_main()
+void app_main(void)
 {
-    // 1. Inicializa FFT
-    dsps_fft2r_init_fc32(NULL, CONFIG_DSP_MAX_FFT_SIZE);
-    dsps_wind_hann_f32(wind, N_SAMPLES);
+    ESP_LOGI(TAG, "Iniciando monitor de corrente...");
 
-    // 2. Configura ADC1 (Canal 0)
-    adc_oneshot_unit_handle_t adc_handle;
-    adc_oneshot_unit_init_cfg_t init_config = { .unit_id = ADC_UNIT_1 };
-    adc_oneshot_new_unit(&init_config, &adc_handle);
-    adc_oneshot_chan_cfg_t config = { .atten = ADC_ATTEN_DB_12, .bitwidth = ADC_BITWIDTH_12 };
-    adc_oneshot_config_channel(adc_handle, ADC_CHANNEL, &config);
+    // 1) NVS + WiFi (STA) + cliente MQTT
+    mqtt_bridge_init();
 
-    ESP_LOGI(TAG, "Capturando e processando FFT a 4kHz...");
+    // 2) ADC (canal 0 / GPIO36) + inicialização das tabelas de FFT e da
+    //    janela de Hann da esp-dsp (mesmo procedimento de dsps_window_main.c)
+    ESP_ERROR_CHECK(current_monitor_init_adc());
 
+    // 3) Fila com 1 posição: sempre guarda o relatório mais recente
+    QueueHandle_t report_queue = xQueueCreate(1, sizeof(current_monitor_report_t));
+    if (report_queue == NULL) {
+        ESP_LOGE(TAG, "Falha ao criar fila de relatórios");
+        return;
+    }
+
+    // 4) Task dedicada de aquisição + FFT (roda a cada ~250 ms e sobrescreve
+    //    o relatório na fila a cada ciclo — ver current_monitor_task)
+    xTaskCreatePinnedToCore(current_monitor_task, "current_monitor", 8192,
+                             report_queue, 5, NULL, 1);
+
+    // 5) Loop principal: aguarda cada novo relatório e publica via MQTT
+    //    no tópico/formato que Grafico.py espera
+    current_monitor_report_t report;
     while (1) {
-        // 3. Captura amostras
-        for (int i = 0; i < N_SAMPLES; i++) {
-            int raw;
-            adc_oneshot_read(adc_handle, ADC_CHANNEL, &raw);
-            
-            // Centraliza o sinal (Ajuste o 1340 conforme seu offset medido)
-            adc_data[i * 2 + 0] = (float)(raw - 2200) / 1800.0f;
-            adc_data[i * 2 + 1] = 0; 
-            
-            // Aplica janela de Hann
-            adc_data[i * 2 + 0] *= wind[i]; 
-
-            int min_val = 4095;
-            int max_val = 0;
-            for (int i = 0; i < N_SAMPLES; i++) {
-                // ... (seu código de leitura)
-                if (raw < min_val) min_val = raw;
-                if (raw > max_val) max_val = raw;
+        if (xQueueReceive(report_queue, &report, portMAX_DELAY) == pdTRUE) {
+            if (mqtt_bridge_is_connected()) {
+                mqtt_bridge_publish_report(&report);
+            } else {
+                ESP_LOGW(TAG, "MQTT não conectado, relatório descartado.");
             }
-            ESP_LOGI(TAG, "ADC Range: [%d, %d]", min_val, max_val);
-            
-            // Delay de 250us -> 4kHz de sampling rate
-            esp_rom_delay_us(250); 
-
-
-
         }
-
-        // 4. Executa FFT
-        dsps_fft2r_fc32(adc_data, N_SAMPLES);
-        dsps_bit_rev_fc32(adc_data, N_SAMPLES);
-        dsps_cplx2reC_fc32(adc_data, N_SAMPLES);
-
-        // 5. Calcula magnitude em dB e prepara para visualização
-        for (int i = 0; i < N_SAMPLES / 2; i++) {
-            float re = adc_data[i * 2 + 0];
-            float im = adc_data[i * 2 + 1];
-            float mag = sqrtf(re * re + im * im);
-            adc_data[i] = 10 * log10f((mag + 0.000001f) / N_SAMPLES);
-        }
-
-        // 6. Imprime espectro no terminal
-        ESP_LOGW(TAG, "Espectro (dB):");
-        dsps_view(adc_data, N_SAMPLES / 2, 64, 10, -60, 40, '|');
-
-        
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

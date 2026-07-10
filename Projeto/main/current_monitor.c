@@ -42,7 +42,9 @@ static float s_samples[FFT_SIZE];
 // Buffers exigidos pelo esp-dsp
 // O buffer FFT precisa de espaço para Real e Imaginário intercalados (2 * FFT_SIZE)
 // Alinhamento de 16 bytes melhora performance em arquiteturas que suportam instruções SIMD
+
 static float s_fft_buffer[FFT_SIZE * 2] __attribute__((aligned(16)));
+
 static float s_hann_window[FFT_SIZE] __attribute__((aligned(16)));
 static bool s_dsp_initialized = false;
 
