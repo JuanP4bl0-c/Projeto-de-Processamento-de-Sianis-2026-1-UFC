@@ -7,8 +7,10 @@ from collections import deque
 
 # --- Configurações ---
 BROKER = "192.168.0.6"  # Ajuste para o seu IP
+# BROKER = "10.10.220.31"  # Ajuste para o seu IP
+# BROKER = "10.0.105.207"  # Ajuste para o seu IP
 TOPICO = "esp32/sinal"   # Verifique se este é o tópico exato que a ESP32 publica
-FATOR_CALIBRACAO = 0.005  # Ajuste conforme necessário
+FATOR_CALIBRACAO = 0.0001236  # Ajuste conforme necessário
 
 # --- Configuração dos buffers de Métricas ---
 MAX_PONTOS = 50
